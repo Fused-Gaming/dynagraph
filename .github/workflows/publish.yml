@@ -6,6 +6,11 @@ on:
     paths:
       - 'package.json'
       - 'CHANGELOG.md'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (from package.json)'
+        required: false
 
 permissions:
   contents: write
