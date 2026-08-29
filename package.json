@@ -1,15 +1,14 @@
 {
   "name": "@h4shed/dynagraph",
   "version": "0.1.0",
-  "description": "Vector-first dynamic Open Graph image renderer",
+  "description": "Vector-first dynamic Open Graph image renderer — Phase 7 core rendering engine",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
     }
   },
   "files": [
@@ -18,10 +17,9 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "test": "node --test",
-    "lint": "eslint src",
+    "build": "tsc --project tsconfig.json",
+    "dev": "tsc --project tsconfig.json --watch",
+    "test": "echo 'No tests yet'",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [
@@ -30,16 +28,20 @@
     "renderer",
     "svg",
     "dynamic",
-    "image-generation"
+    "image-generation",
+    "dynagraph"
   ],
   "author": "Fused Gaming",
   "license": "Apache-2.0",
   "engines": {
     "node": ">=20.0.0"
   },
+  "dependencies": {
+    "@h4shed/mcp-core": "^1.0.24"
+  },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "typescript": "^5.3.0"
+    "@types/node": "^20.12.0",
+    "typescript": "^5.3.2"
   },
   "repository": {
     "type": "git",
@@ -48,5 +50,9 @@
   "bugs": {
     "url": "https://github.com/Fused-Gaming/dynagraph/issues"
   },
-  "homepage": "https://github.com/Fused-Gaming/dynagraph"
+  "homepage": "https://github.com/Fused-Gaming/dynagraph",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }
