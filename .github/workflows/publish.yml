@@ -6,6 +6,7 @@ on:
     paths:
       - 'package.json'
       - 'CHANGELOG.md'
+      - '.github/workflows/publish.yml'
   workflow_dispatch:
     inputs:
       version:
