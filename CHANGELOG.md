@@ -14,28 +14,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Documentation for changelog bot automation
   - README with project overview and architecture
 
----
+### Documentation
+- Architecture documentation for Phase 7-8 transition
+- Changelog automation workflow documentation
+- Enhanced Phase 1-8 clarification in `dynagraph_render.ts` — PR #2
+- Restructured CHANGELOG to Keep a Changelog standard format — PR #2
 
-## Development Phases
+## [0.1.0] - 2026-08-29
 
-### Phase 7 (Current — Scaffold)
-- Core rendering engine architecture
-- Template system design
-- Configuration layer
-- Error handling framework
-
-### Phase 8+ (Planned)
-- SVG → PNG/WebP rasterization
-- Custom template system
-- Performance optimization
-- HTTP API server
-- Visual regression testing
-
-### Phase 9+ (Commercial)
-- Dual-licensing implementation
-- Commercial tier features
-- Enterprise support
-
----
-
-**Status**: Phase 7 initialization underway. Automated changelog tracking active.
+### Added
+- Initial project scaffold for Phase 7
+- Package configuration for `@h4shed/dynagraph` core SDK
+- MCP tool definitions and placeholder implementations
+  - `dynagraph_render` — OG image rendering
+  - `dynagraph_list_templates` — Template discovery
+  - `dynagraph_preview` — SVG preview generation
+  - `dynagraph_validate_template` — Template validation
+- TypeScript configuration and build setup
+- GitHub Actions workflows for changelog automation

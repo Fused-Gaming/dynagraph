@@ -1,0 +1,43 @@
+{
+  "version": "0.1.0",
+  "generated_at": "2026-08-29T12:00:00Z",
+  "baselines": {
+    "svg_render_1200x630": {
+      "name": "SVG Render (1200x630)",
+      "target_ms": 50,
+      "tolerance_ms": 10,
+      "category": "rendering",
+      "description": "Render single template to SVG output"
+    },
+    "svg_render_2400x1260": {
+      "name": "SVG Render (2400x1260 - 2x DPR)",
+      "target_ms": 55,
+      "tolerance_ms": 15,
+      "category": "rendering",
+      "description": "Render template with 2x device pixel ratio"
+    },
+    "template_list": {
+      "name": "Template Discovery",
+      "target_ms": 5,
+      "tolerance_ms": 2,
+      "category": "discovery",
+      "description": "List all available templates"
+    },
+    "template_validation": {
+      "name": "Template Validation",
+      "target_ms": 20,
+      "tolerance_ms": 5,
+      "category": "validation",
+      "description": "Validate template TypeScript code"
+    },
+    "preview_generation": {
+      "name": "SVG Preview Generation",
+      "target_ms": 30,
+      "tolerance_ms": 8,
+      "category": "preview",
+      "description": "Generate quick SVG preview"
+    }
+  },
+  "phase": "7",
+  "notes": "Phase 7 baselines - placeholder implementations. Will be refined in Phase 8+ with actual rendering pipeline."
+}
