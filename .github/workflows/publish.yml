@@ -21,6 +21,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Debug Info
+        run: |
+          echo "Node version: $(node --version)"
+          echo "npm version: $(npm --version)"
+          echo "GitHub context: ${{ github.event_name }}"
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
