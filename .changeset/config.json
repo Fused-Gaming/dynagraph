@@ -1,11 +1,6 @@
 {
   "$schema": "https://docs.npmjs.com/cli/v10/configuring-npm/package-json",
-  "changelog": [
-    "@changesets/changelog-github",
-    {
-      "repo": "Fused-Gaming/dynagraph"
-    }
-  ],
+  "changelog": "@changesets/cli/changelog",
   "commit": true,
   "fixed": [],
   "linked": [],
