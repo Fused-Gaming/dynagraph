@@ -1,52 +1,30 @@
 /**
- * Dynagraph MCP Skill
+ * Dynagraph Core SDK
  * Vector-first dynamic Open Graph image renderer
- * Architecture: https://github.com/Fused-Gaming/Fused-Gaming-Skill-MCP/blob/main/docs/architecture/DYNAGRAPH-INTEGRATION.md
+ *
+ * Pure rendering functions - no external dependencies.
+ * Can be used standalone or wrapped by MCP adapter.
  */
 
-import type { Skill, SkillConfig } from "@h4shed/mcp-core";
-import { renderTool } from "./tools/dynagraph_render.js";
-import { listTemplatesTool } from "./tools/dynagraph_list_templates.js";
-import { validateTemplateTool } from "./tools/dynagraph_validate_template.js";
-import { previewTool } from "./tools/dynagraph_preview.js";
-
-// Export individual tools for manual invocation
-export { renderTool, listTemplatesTool, validateTemplateTool, previewTool };
+// Core rendering functions
+export { render, type RenderOptions, type RenderResult } from "./tools/dynagraph_render.js";
+export { listTemplates, type ListTemplatesResult, type TemplateMetadata } from "./tools/dynagraph_list_templates.js";
+export { validateTemplate, type ValidateOptions, type ValidationResult } from "./tools/dynagraph_validate_template.js";
+export { preview, type PreviewOptions, type PreviewResult } from "./tools/dynagraph_preview.js";
 
 /**
- * Dynagraph Skill
- *
- * Phase 1 Scaffolding (Current)
- * - MCP tool definitions for integration
- * - Placeholder implementations
- * - Ready for Phase 8+ rendering pipeline
- *
- * Tools:
- * 1. dynagraph_render - Render OG images
- * 2. dynagraph_list_templates - List available templates
- * 3. dynagraph_validate_template - Validate template code
- * 4. dynagraph_preview - Generate SVG previews
+ * Dynagraph Version
+ * Phase 1 - Core SDK Scaffold
  */
-export const dynagraphSkill: Skill = {
-  name: "dynagraph",
-  version: "1.0.0",
-  description:
-    "Vector-first dynamic Open Graph image renderer - Phase 1 scaffold with MCP adapter",
-  tools: [renderTool, listTemplatesTool, validateTemplateTool, previewTool],
+export const VERSION = "0.1.0";
 
-  async initialize(config: SkillConfig): Promise<void> {
-    console.log("[Dynagraph] Skill initialized");
-    console.log(
-      "[Dynagraph] Phase 1 scaffold: MCP adapter ready for Phase 8+ rendering"
-    );
-    if (config.debug) {
-      console.log("[Dynagraph] Debug mode enabled");
-    }
-  },
-
-  async cleanup(): Promise<void> {
-    console.log("[Dynagraph] Skill cleaned up");
-  },
-};
-
-export default dynagraphSkill;
+/**
+ * Dynagraph Package Info
+ */
+export const PACKAGE_INFO = {
+  name: "@h4shed/dynagraph",
+  version: VERSION,
+  description: "Vector-first dynamic Open Graph image renderer",
+  phase: "1 - Core SDK Scaffold",
+  status: "Placeholder implementations ready for Phase 8+ rendering",
+} as const;

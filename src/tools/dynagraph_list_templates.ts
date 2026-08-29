@@ -1,12 +1,29 @@
 /**
- * Dynagraph List Templates Tool
+ * Dynagraph List Templates Function
  * Lists available Dynagraph templates
+ *
+ * Core SDK function - can be used directly or wrapped by MCP adapter.
  */
 
-import type { ToolDefinition } from "@h4shed/mcp-core";
+export interface TemplateMetadata {
+  id: string;
+  name: string;
+  description: string;
+  version: string;
+  defaultSize: { width: number; height: number };
+  requiredProps: string[];
+  optionalProps: string[];
+}
+
+export interface ListTemplatesResult {
+  success: boolean;
+  count: number;
+  templates: TemplateMetadata[];
+  message: string;
+}
 
 // Phase 1 template definitions
-const TEMPLATES = [
+const TEMPLATES: TemplateMetadata[] = [
   {
     id: "profile",
     name: "Profile Card",
@@ -36,25 +53,16 @@ const TEMPLATES = [
   },
 ];
 
-export const listTemplatesTool: ToolDefinition = {
-  name: "dynagraph_list_templates",
-  description: "List all available Dynagraph templates",
-  inputSchema: {
-    type: "object",
-    properties: {},
-  },
-
-  async handler(): Promise<Record<string, unknown>> {
-    try {
-      return {
-        success: true,
-        count: TEMPLATES.length,
-        templates: TEMPLATES,
-        message: "Phase 1 scaffold: Built-in templates available. Custom templates coming in Phase 8+.",
-      };
-    } catch (error) {
-      const err = error instanceof Error ? error.message : String(error);
-      throw new Error(`Failed to list templates: ${err}`);
-    }
-  },
-};
+export async function listTemplates(): Promise<ListTemplatesResult> {
+  try {
+    return {
+      success: true,
+      count: TEMPLATES.length,
+      templates: TEMPLATES,
+      message: "Phase 1 scaffold: Built-in templates available. Custom templates coming in Phase 8+.",
+    };
+  } catch (error) {
+    const err = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to list templates: ${err}`);
+  }
+}
