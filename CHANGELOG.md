@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 - Architecture documentation for Phase 7-8 transition
 - Changelog automation workflow documentation
+- Enhanced Phase 1-8 clarification in `dynagraph_render.ts` — PR #2
+- Restructured CHANGELOG to Keep a Changelog standard format — PR #2
 
 ## [0.1.0] - 2026-08-29
 
