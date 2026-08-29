@@ -1,0 +1,92 @@
+[
+  {
+    "name": "type: feature",
+    "color": "0366d6",
+    "description": "New feature or capability"
+  },
+  {
+    "name": "type: fix",
+    "color": "d73a49",
+    "description": "Bug fix or error correction"
+  },
+  {
+    "name": "type: docs",
+    "color": "0e8a16",
+    "description": "Documentation updates"
+  },
+  {
+    "name": "type: refactor",
+    "color": "fbca04",
+    "description": "Code restructuring or improvement"
+  },
+  {
+    "name": "type: chore",
+    "color": "cccccc",
+    "description": "Maintenance or dependency updates"
+  },
+  {
+    "name": "type: test",
+    "color": "7057ff",
+    "description": "Test improvements or additions"
+  },
+  {
+    "name": "priority: critical",
+    "color": "d73a49",
+    "description": "Critical priority - needs immediate attention"
+  },
+  {
+    "name": "priority: high",
+    "color": "ff6b6b",
+    "description": "High priority"
+  },
+  {
+    "name": "priority: medium",
+    "color": "ffa500",
+    "description": "Medium priority"
+  },
+  {
+    "name": "priority: low",
+    "color": "d4c5f9",
+    "description": "Low priority - nice to have"
+  },
+  {
+    "name": "status: in-progress",
+    "color": "0e8a16",
+    "description": "Currently being worked on"
+  },
+  {
+    "name": "status: blocked",
+    "color": "d73a49",
+    "description": "Blocked by another issue or dependency"
+  },
+  {
+    "name": "status: review",
+    "color": "0366d6",
+    "description": "In code review"
+  },
+  {
+    "name": "skip-changelog",
+    "color": "ffffff",
+    "description": "Skip automatic changelog update"
+  },
+  {
+    "name": "area: rendering",
+    "color": "1f883d",
+    "description": "Core rendering engine"
+  },
+  {
+    "name": "area: templates",
+    "color": "1f883d",
+    "description": "Template system and definitions"
+  },
+  {
+    "name": "area: api",
+    "color": "1f883d",
+    "description": "HTTP API server"
+  },
+  {
+    "name": "area: devops",
+    "color": "1f883d",
+    "description": "DevOps, CI/CD, or infrastructure"
+  }
+]

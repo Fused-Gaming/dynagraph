@@ -1,0 +1,132 @@
+name: Auto Changelog Bot
+
+on:
+  pull_request:
+    types: [opened, edited, labeled, unlabeled]
+    branches: [main, develop]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  update-changelog:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.pull_request.draft == false &&
+      !startsWith(github.event.pull_request.title, 'WIP')
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+          token: ${{ github.token }}
+
+      - name: Categorize PR and update CHANGELOG
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_LABELS: ${{ toJSON(github.event.pull_request.labels) }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          node << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          const changelogPath = path.join(process.cwd(), 'CHANGELOG.md');
+          let changelog = fs.readFileSync(changelogPath, 'utf8');
+
+          // Extract PR information from environment
+          const prTitle = process.env.PR_TITLE;
+          const prNumber = process.env.PR_NUMBER;
+          const prAuthor = process.env.PR_AUTHOR;
+          const prLabels = JSON.parse(process.env.PR_LABELS || '[]');
+          const prBody = process.env.PR_BODY || '';
+
+          // Determine category from labels or title keywords
+          let category = 'Changed';
+          const labelNames = prLabels.map(l => l.name.toLowerCase());
+
+          if (labelNames.includes('type: feature') || prTitle.toLowerCase().includes('add')) {
+            category = 'Added';
+          } else if (labelNames.includes('type: fix') || prTitle.toLowerCase().includes('fix')) {
+            category = 'Fixed';
+          } else if (labelNames.includes('type: docs')) {
+            category = 'Documentation';
+          } else if (labelNames.includes('type: refactor')) {
+            category = 'Changed';
+          } else if (labelNames.includes('type: chore')) {
+            category = 'Maintenance';
+          }
+
+          // Extract feature description
+          let description = prTitle;
+
+          // Try to extract summary from PR body if available
+          if (prBody) {
+            const summaryMatch = prBody.match(/## Summary\n([\s\S]*?)(?:\n##|$)/);
+            if (summaryMatch) {
+              description = summaryMatch[1].trim().split('\n')[0];
+            }
+          }
+
+          // Format the changelog entry
+          const entry = `- **${description}** — PR #${prNumber}`;
+
+          // Find or create Unreleased section
+          const unreleasedPattern = /## \[Unreleased\]\n/;
+          if (!unreleasedPattern.test(changelog)) {
+            // If Unreleased section doesn't exist, add it after header
+            const headerEnd = changelog.indexOf('\n\n');
+            if (headerEnd > 0) {
+              changelog = changelog.substring(0, headerEnd + 2) + '## [Unreleased]\n\n### Changed\n' + entry + '\n' + changelog.substring(headerEnd + 2);
+            }
+          } else {
+            // Find the appropriate subsection in Unreleased
+            const unreleasedStart = changelog.indexOf('## [Unreleased]');
+            const nextVersionStart = changelog.indexOf('\n## [', unreleasedStart + 1);
+            const unreleasedSection = changelog.substring(unreleasedStart, nextVersionStart > 0 ? nextVersionStart : changelog.length);
+
+            // Look for the category subsection
+            const categoryPattern = new RegExp(`### ${category}\n`);
+
+            if (categoryPattern.test(unreleasedSection)) {
+              // Add to existing category section
+              changelog = changelog.replace(
+                categoryPattern,
+                `### ${category}\n${entry}\n`
+              );
+            } else {
+              // Create new category section at the end of Unreleased
+              const lastCategoryMatch = unreleasedSection.match(/### \w+\n[\s\S]*?(?=\n###|\n## |\Z)/g);
+              if (lastCategoryMatch) {
+                const lastCategoryEnd = changelog.indexOf(lastCategoryMatch[lastCategoryMatch.length - 1]) + lastCategoryMatch[lastCategoryMatch.length - 1].length;
+                changelog = changelog.substring(0, lastCategoryEnd) + '\n\n### ' + category + '\n' + entry + changelog.substring(lastCategoryEnd);
+              }
+            }
+          }
+
+          // Avoid duplicate entries
+          if (!changelog.includes(`PR #${prNumber}`)) {
+            fs.writeFileSync(changelogPath, changelog, 'utf8');
+            console.log(`✓ Updated CHANGELOG.md for PR #${prNumber} in ${category} section`);
+          } else {
+            console.log(`ℹ Changelog already contains PR #${prNumber}, skipping update`);
+          }
+          EOF
+
+      - name: Commit changelog changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Changelog Bot"
+
+          if git diff --quiet CHANGELOG.md; then
+            echo "No changelog changes to commit"
+          else
+            git add CHANGELOG.md
+            git commit -m "docs: auto-update CHANGELOG.md for PR #${{ github.event.pull_request.number }}"
+            git push origin HEAD:${{ github.head_ref }}
+            echo "✓ Pushed changelog update"
+          fi
