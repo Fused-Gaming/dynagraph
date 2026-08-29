@@ -1,12 +1,22 @@
 # Dynagraph
 
+[![npm version](https://img.shields.io/npm/v/@h4shed/dynagraph.svg?style=flat-square)](https://www.npmjs.com/package/@h4shed/dynagraph)
+[![npm downloads](https://img.shields.io/npm/dm/@h4shed/dynagraph.svg?style=flat-square)](https://www.npmjs.com/package/@h4shed/dynagraph)
+[![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg?style=flat-square)](LICENSE)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D20.0.0-green.svg?style=flat-square)](https://nodejs.org)
+[![TypeScript](https://img.shields.io/badge/typescript-5.3%2B-blue.svg?style=flat-square)](https://www.typescriptlang.org)
+
 **Vector-first dynamic Open Graph image renderer**
 
-Phase 7+ core rendering engine for the Fused Gaming MCP ecosystem.
+Standalone core rendering SDK for the Fused Gaming ecosystem.
 
 ## Status
 
-🚀 **Phase 7 Scaffold** — Core rendering pipeline initialization
+| Phase | Version | Status | Target |
+|-------|---------|--------|--------|
+| **Phase 7** | [v0.2.0](https://github.com/Fused-Gaming/dynagraph/releases/tag/v0.2.0) | ✅ **Stable Core SDK** | Pure rendering functions |
+| Phase 8 | v0.3.0+ | 📋 Planned | SVG rendering + rasterization |
+| Phase 9+ | v1.0.0+ | 🔮 Planned | Production-ready + dual licensing |
 
 ## Overview
 
@@ -16,20 +26,32 @@ Dynagraph is a high-performance, vector-first renderer for generating dynamic Op
 
 ## Features
 
-### Phase 7 (Current — Roadmap)
-- [ ] Core SVG rendering pipeline
-- [ ] Template system architecture
-- [ ] Default template implementations (profile, article, product)
-- [ ] Configuration system
-- [ ] Error handling and validation
+### Phase 7 ✅ (Current — Stable)
 
-### Phase 8+ (Planned)
-- [ ] SVG → PNG/WebP rasterization
+Core SDK released with pure async functions:
+- ✅ **Stable API**: `render()`, `listTemplates()`, `validateTemplate()`, `preview()`
+- ✅ **Full TypeScript**: Complete type safety with interfaces
+- ✅ **Template System**: Profile, Article, Product templates
+- ✅ **SVG Rendering**: Placeholder SVG generation (Phase 8+ will add real rendering)
+- ✅ **Validation**: Template code validation with error reporting
+- ✅ **Benchmarking**: 5 performance benchmarks with baselines
+- ✅ **CI/CD**: Automated build, test, and publish pipeline
+- ✅ **npm Publishing**: Available at [@h4shed/dynagraph](https://www.npmjs.com/package/@h4shed/dynagraph)
+
+### Phase 8 (Planned v0.3+)
+- [ ] Real SVG rendering engine
+- [ ] Rasterization: SVG → PNG/WebP
 - [ ] Custom template system
-- [ ] Performance optimization
+- [ ] Performance: <50ms SVG, <200ms PNG
 - [ ] HTTP API server
 - [ ] Caching layer
+
+### Phase 9+ (Planned v1.0+)
+- [ ] Dual licensing (PolyForm + Commercial)
+- [ ] Advanced rendering features
+- [ ] Production optimization
 - [ ] Visual regression testing
+- [ ] Enterprise support
 
 ## Installation
 
@@ -39,26 +61,71 @@ npm install @h4shed/dynagraph
 
 ## Quick Start
 
-### Basic Rendering
+### List Available Templates
 
 ```typescript
-import { DynagraphRenderer } from '@h4shed/dynagraph';
+import { listTemplates } from '@h4shed/dynagraph';
 
-const renderer = new DynagraphRenderer();
+const templates = await listTemplates();
+console.log(templates);
+// Output:
+// {
+//   success: true,
+//   count: 3,
+//   templates: [
+//     { id: 'profile', name: 'Profile Card', ... },
+//     { id: 'article', name: 'Article Preview', ... },
+//     { id: 'product', name: 'Product Card', ... }
+//   ]
+// }
+```
 
-const svg = await renderer.render({
+### Render an Image
+
+```typescript
+import { render } from '@h4shed/dynagraph';
+
+const result = await render({
   template: 'profile',
   props: {
     title: 'John Doe',
-    subtitle: 'Full Stack Engineer',
-    avatar: 'https://example.com/avatar.jpg'
+    subtitle: 'Full Stack Engineer'
   },
   width: 1200,
   height: 630,
   format: 'svg'
 });
 
-console.log(svg); // SVG string
+console.log(result.svg); // SVG string
+console.log(result.base64); // Base64-encoded SVG
+```
+
+### Generate Preview
+
+```typescript
+import { preview } from '@h4shed/dynagraph';
+
+const previewResult = await preview({
+  template: 'article',
+  props: { title: 'My Article' },
+  width: 600,
+  height: 315
+});
+
+console.log(previewResult.svg); // Quick preview
+```
+
+### Validate Template Code
+
+```typescript
+import { validateTemplate } from '@h4shed/dynagraph';
+
+const result = await validateTemplate({
+  template_code: 'export const MyTemplate = { /* ... */ }'
+});
+
+console.log(result.valid); // boolean
+console.log(result.errors); // string[]
 ```
 
 ## Development
@@ -81,30 +148,82 @@ npm run dev
 npm test
 ```
 
+## API Reference
+
+### Core Functions
+
+**`render(options: RenderOptions): Promise<RenderResult>`**
+- Renders an OG image using a template and custom properties
+- Returns SVG or placeholder for PNG/WebP (Phase 8+)
+
+**`listTemplates(): Promise<ListTemplatesResult>`**
+- Lists all available templates with metadata
+- Includes required/optional properties for each template
+
+**`validateTemplate(options: ValidateOptions): Promise<ValidationResult>`**
+- Validates TypeScript template code
+- Returns errors and warnings
+
+**`preview(options: PreviewOptions): Promise<PreviewResult>`**
+- Generates quick SVG preview with grid layout
+- Useful for template inspection
+
+See [docs/API.md](docs/API.md) for complete details.
+
 ## Architecture
+
+### Directory Structure
 
 ```
 dynagraph/
 ├── src/
-│   ├── core/          # Rendering engine
-│   ├── templates/     # Template definitions
-│   ├── rasterizer/    # SVG → PNG/WebP (Phase 8+)
-│   └── index.ts       # Public API
-├── tests/
-└── docs/
+│   ├── tools/
+│   │   ├── dynagraph_render.ts        # Rendering function
+│   │   ├── dynagraph_list_templates.ts # Template listing
+│   │   ├── dynagraph_validate_template.ts # Validation
+│   │   └── dynagraph_preview.ts       # Preview generation
+│   └── index.ts                       # Public API exports
+├── benchmarks/
+│   ├── compare.ts                     # Benchmark suite
+│   ├── baselines.json                 # Performance targets
+│   └── report.md                      # Latest results
+├── dist/                              # Compiled JavaScript
+│── docs/
+└── .github/workflows/
+    └── publish.yml                    # Auto-publish workflow
 ```
+
+### Design
+
+- **Pure Functions**: No classes, no dependencies, just async functions
+- **Full TypeScript**: Complete type safety with exported interfaces
+- **Standalone**: Works in Node.js, Deno, browsers (when bundled)
+- **MCP-Ready**: Can be wrapped by MCP adapter in separate package
+- **Benchmarked**: Phase 7 baselines included, Phase 8+ targets defined
 
 ## Integration
 
 ### With MCP Adapter
 
-The `@h4shed/skill-dynagraph` MCP adapter uses this library:
+The `@h4shed/skill-dynagraph` MCP adapter wraps these functions:
 
 ```typescript
-import { DynagraphRenderer } from '@h4shed/dynagraph';
+import { render, listTemplates, validateTemplate, preview } from '@h4shed/dynagraph';
 
-const renderer = new DynagraphRenderer();
-// Used by tool handlers: dynagraph_render, dynagraph_preview
+// These wrap the core functions for MCP tool definitions
+// dynagraph_render → render()
+// dynagraph_list_templates → listTemplates()
+// dynagraph_validate_template → validateTemplate()
+// dynagraph_preview → preview()
+```
+
+### Direct Usage
+
+```typescript
+import { render, listTemplates } from '@h4shed/dynagraph';
+
+// Use directly in your application
+const result = await render({ template: 'profile', props: {...} });
 ```
 
 ## Documentation
