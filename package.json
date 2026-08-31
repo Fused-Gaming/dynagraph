@@ -1,5 +1,5 @@
 {
-  "name": "@h4shed/dynagraph",
+  "name": "dynagraph",
   "version": "0.2.0",
   "description": "Vector-first dynamic Open Graph image renderer — Phase 7 stable core SDK",
   "type": "module",
